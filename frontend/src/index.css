@@ -1,0 +1,378 @@
+/* ==========================================================================
+   GLOBAL & LAYOUT RESET
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background: #131314;
+  color: #e3e3e3;
+}
+
+.app-layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   SIDEBAR MODULE STYLING
+   ========================================================================== */
+.sidebar {
+  width: 280px;
+  background: #1e1f20;
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  border-right: 1px solid #28292a;
+}
+
+.new-chat-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 20px;
+  color: white;
+  cursor: pointer;
+  justify-content: center;
+  margin-bottom: 20px;
+  transition: 0.2s;
+}
+
+.new-chat-btn:hover {
+  background: #2b2b2b;
+}
+
+.sessions-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.session-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+.session-item:hover,
+.session-item.active {
+  background: #004a7733;
+  color: #7fcfff;
+}
+
+.session-item span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  color: #aaa;
+  padding: 10px;
+  cursor: pointer;
+  margin-top: auto;
+}
+
+.logout-btn:hover {
+  color: #ff6b6b;
+}
+
+/* Sidebar Delete Action Button Styles */
+.delete-session-icon-btn {
+  opacity: 0;
+  transition: opacity 0.15s ease, color 0.15s ease;
+}
+
+.session-item:hover .delete-session-icon-btn {
+  opacity: 1;
+}
+
+.delete-session-icon-btn:hover .trash-icon {
+  color: #ff6b6b !important;
+}
+
+/* ==========================================================================
+   CHAT WORKSPACE WINDOW AREA
+   ========================================================================== */
+.chat-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #131314;
+  position: relative;
+}
+
+.messages-window {
+  flex: 1;
+  overflow-y: auto;
+  padding: 40px 20% 100px 20%;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.welcome-hero {
+  font-size: 36px;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 20vh;
+  color: #444746;
+  font-family: 'Google Sans', sans-serif;
+}
+
+/* ==========================================================================
+   DYNAMIC CHAT MESSAGE ROWS & BUBBLES (UPDATED ALIGNMENTS)
+   ========================================================================== */
+.message-row {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  max-width: 800px;
+  animation: fadeIn 0.3s ease;
+}
+
+/* AI Model Formatting (Stays on Left Side) */
+.message-row.model-row {
+  align-self: flex-start;
+}
+
+/* User Formatting (Pushed to Right Side) */
+.message-row.user-row {
+  align-self: flex-end;
+  flex-direction: row-reverse; /* Flips the horizontal positioning order of avatar and content */
+}
+
+/* Base Avatar Node structure */
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.user-row .avatar {
+  background: #5c6bc0;
+}
+
+.model-row .avatar {
+  background: #00bcd4;
+}
+
+/* Structural Layout Bundle containing content bubble + buttons */
+.bubble-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: calc(100% - 60px);
+}
+
+/* Text Core Bubble properties */
+.bubble {
+  line-height: 1.6;
+  font-size: 16px;
+  word-wrap: break-word;
+  padding-top: 4px;
+  color: #e3e3e3;
+}
+
+/* User custom standalone container pill canvas */
+.user-row .bubble {
+  background: #282a2d;
+  padding: 12px 20px;
+  border-radius: 18px;
+}
+
+/* Gemini Model content block merges natively into the primary workspace canvas */
+.model-row .bubble {
+  background: none;
+  padding: 4px 0;
+}
+
+/* ==========================================================================
+   COPY BUTTON ACTION TOOLBAR
+   ========================================================================== */
+.message-actions {
+  display: flex;
+  margin-top: 4px;
+}
+
+.copy-btn {
+  background: none;
+  border: none;
+  color: #80868b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  transition: all 0.2s ease;
+  width: fit-content;
+}
+
+.copy-btn:hover {
+  background-color: #1e1f20;
+  color: #e3e3e3;
+}
+
+.copy-btn .copied {
+  color: #34a853 !important; /* Success confirmation green */
+}
+
+/* ==========================================================================
+   BOTTOM TEXT INPUT BAR
+   ========================================================================== */
+.input-container {
+  position: absolute;
+  bottom: 25px;
+  left: 20%;
+  right: 20%;
+  display: flex;
+  background: #1e1f20;
+  border-radius: 30px;
+  padding: 8px 15px;
+  align-items: center;
+}
+
+.input-container input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: white;
+  font-size: 16px;
+  padding: 10px;
+}
+
+.input-container button {
+  background: none;
+  border: none;
+  color: #80868b;
+  cursor: pointer;
+  padding: 8px;
+  transition: 0.2s;
+}
+
+.input-container button:hover {
+  color: white;
+}
+
+/* ==========================================================================
+   MARKDOWN CODE BLOCKS OVERRIDES
+   ========================================================================== */
+.code-block-syntax {
+  border-radius: 8px !important;
+  margin: 12px 0 !important;
+  background: #1e1e1e !important;
+  font-family: 'Courier New', Courier, monospace !important;
+  font-size: 14px !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.bubble code {
+  background: #2d2f34;
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #f1f1f1;
+}
+
+/* ==========================================================================
+   AUTHENTICATION MODULE FORMS
+   ========================================================================== */
+.auth-wrapper {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #131314;
+}
+
+.auth-card {
+  background: #1e1f20;
+  padding: 40px;
+  border-radius: 12px;
+  width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.auth-card h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  text-align: center;
+  color: white;
+}
+
+.auth-card input {
+  padding: 12px;
+  background: #131314;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: white;
+  font-size: 14px;
+}
+
+.auth-card button {
+  padding: 12px;
+  background: #007acc;
+  border: none;
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.auth-card p {
+  text-align: center;
+  font-size: 13px;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.auth-card p:hover {
+  color: #007acc;
+}
+
+/* ==========================================================================
+   ANIMATIONS GLOBAL DEFINITIONS
+   ========================================================================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
